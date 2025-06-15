@@ -1,4 +1,6 @@
 class ActiveCollab::Response
+  attr_reader :raw_body
+
   def initialize(raw_body)
     @raw_body = raw_body
     @raw_body = '{}' if raw_body == '' || raw_body.nil?
