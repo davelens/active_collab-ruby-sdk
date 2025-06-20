@@ -3,7 +3,7 @@
 require_relative 'lib/active_collab'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'active-collab-ruby-sdk'
+  spec.name          = 'active_collab-ruby-sdk'
   spec.version       = '0.1.0'
   spec.version       = ActiveCollab::VERSION
   spec.authors       = ['Dave Lens']
@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = 'Ruby SDK for Active Collab API'
   spec.description   = 'A basic Ruby SDK to interact with the Active Collab API.'
-  spec.homepage      = 'https://github.com/davelens/active-collab-ruby-sdk'
+  spec.homepage      = 'https://github.com/davelens/active_collab-ruby-sdk'
   spec.license       = 'MIT'
 
   # Files to include in the gem
