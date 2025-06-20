@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    active-collab-ruby-sdk (0.1.0)
+    active_collab-ruby-sdk (0.1.0)
       activesupport (~> 7.2.2.1)
       json (~> 2.12.2)
 
@@ -75,7 +75,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  active-collab-ruby-sdk!
+  active_collab-ruby-sdk!
   irb (~> 1.15.2)
   rspec (~> 3.13.1)
 
