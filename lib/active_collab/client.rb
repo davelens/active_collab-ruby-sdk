@@ -15,9 +15,16 @@ class ActiveCollab::Client
 
   def call(method, uri, params = {})
     method = %w[Post Get Put].include?(method) ? method : 'Get'
-    format = %w[hash json object].include?(params[:format]) ? params[:format] : 'hash'
     request = Object.const_get("Net::HTTP::#{method}").new(uri)
-    request.set_form_data(params.except(:headers)) unless method == 'Get'
+    format = if %w[hash json object].include?(params[:format])
+               params[:format]
+             else
+               'hash'
+             end
+
+    unless method == 'Get'
+      request.set_form_data(params.except(:headers, :format))
+    end
 
     if @token
       request['X-Angie-AuthApiToken'] = @token
@@ -84,10 +91,6 @@ class ActiveCollab::Client
 
   def projects
     ActiveCollab::Projects.new(self)
-  end
-
-  def time_records
-    ActiveCollab::TimeRecords.new(self)
   end
 
   ############################################################################

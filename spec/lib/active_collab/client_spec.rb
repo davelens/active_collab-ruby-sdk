@@ -43,13 +43,41 @@ RSpec.describe ActiveCollab::Client do
 
     before do
       allow(Net::HTTP).to receive(:start) { response_double }
+    end
+
+    it 'can make a HTTP call and parses the response with a hash by default' do
       allow(ActiveCollab::Response).to receive(:new) do
         double(to_hash: { success: true })
       end
+
+      result = subject.call('Get', URI('https://example.com/test'))
+      expect(result).to eq({ success: true })
     end
 
-    it 'can make a HTTP call and parses the response' do
-      result = subject.call('Get', URI('https://example.com/test'))
+    it 'can make a HTTP call and parses the response as json when chosen' do
+      allow(ActiveCollab::Response).to receive(:new) do
+        double(to_json: { success: true })
+      end
+
+      result = subject.call('Get', URI('https://example.com/test'), format: 'json')
+      expect(result).to eq({ success: true })
+    end
+
+    it 'can make a HTTP call and parses the response as object when chosen' do
+      allow(ActiveCollab::Response).to receive(:new) do
+        double(to_object: { success: true })
+      end
+
+      result = subject.call('Get', URI('https://example.com/test'), format: 'object')
+      expect(result).to eq({ success: true })
+    end
+
+    it 'defaults the response to a hash when given an unknown format' do
+      allow(ActiveCollab::Response).to receive(:new) do
+        double(to_hash: { success: true })
+      end
+
+      result = subject.call('Get', URI('https://example.com/test'), format: 'xml')
       expect(result).to eq({ success: true })
     end
   end
