@@ -3,8 +3,8 @@ class ActiveCollab::Projects
     @client = client
   end
 
-  def list
-    @client.get('/projects')
+  def list(params = {})
+    @client.get('/projects', params)
   end
 
   def task_lists(project_id)
