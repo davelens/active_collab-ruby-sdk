@@ -7,24 +7,22 @@ class ActiveCollab::Tasks
   # Works:
   # curl -i -H "X-Angie-AuthApiToken: <TOKEN>" \
   #   https://app.activecollab.com/167099/api/v1/projects/3/tasks
-  def all
+  def all(params = {})
     @client
-      .get("/projects/#{@project_id}/tasks")
-      .dig('tasks')
+      .get("/projects/#{@project_id}/tasks", params)
   end
 
-  def get(id)
+  def get(id, params = {})
     @client
-      .get("/projects/#{@project_id}/tasks/#{id}")
+      .get("/projects/#{@project_id}/tasks/#{id}", params)
   end
 
-  def time_records(id)
+  def time_records(id, params = {})
     @client
-      .get("/projects/#{@project_id}/tasks/#{id}/time-records")
-      .dig('time_records')
+      .get("/projects/#{@project_id}/tasks/#{id}/time-records", params)
   end
 
-  def update(id, params)
+  def update(id, params = {})
     @client
       .put("/projects/#{@project_id}/tasks/#{id}", params)
   end

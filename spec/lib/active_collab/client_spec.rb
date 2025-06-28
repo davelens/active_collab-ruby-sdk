@@ -117,7 +117,7 @@ RSpec.describe ActiveCollab::Client do
   end
 
   it 'makes a few namespaces available' do
-    expect(subject).to respond_to(*%I[projects time_records])
+    expect(subject).to respond_to(*%I[projects])
   end
 
 end

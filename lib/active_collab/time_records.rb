@@ -4,13 +4,13 @@ class ActiveCollab::TimeRecords
     @project_id = project_id
   end
 
-  def all
+  def all(params = {})
     @client
-      .get("/projects/#{@project_id}/time-records")
-      .dig('time_records')
+      .get("/projects/#{@project_id}/time-records", params)
   end
 
-  def push(id, values = {})
-    @client.post("/projects/#{id}/time-records", values)
+  def push(params = {})
+    @client
+      .post("/projects/#{@project_id}/time-records", params)
   end
 end

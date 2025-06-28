@@ -4,8 +4,8 @@ class ActiveCollab::TaskLists
     @project_id = project_id
   end
 
-  def all
+  def all(params = {})
     @client
-      .get("/projects/#{@project_id}/task-lists")
+      .get("/projects/#{@project_id}/task-lists", params)
   end
 end
