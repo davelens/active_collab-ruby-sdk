@@ -4,7 +4,6 @@ require_relative 'lib/active_collab'
 
 Gem::Specification.new do |spec|
   spec.name          = 'active_collab-ruby-sdk'
-  spec.version       = '0.1.0'
   spec.version       = ActiveCollab::VERSION
   spec.authors       = ['Dave Lens']
   spec.email         = ['github@davelens.be']
