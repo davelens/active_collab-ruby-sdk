@@ -6,6 +6,10 @@ class ActiveCollab::Response
     @raw_body = '{}' if raw_body == '' || raw_body.nil?
   end
 
+  def to_json
+    @raw_body
+  end
+
   def to_hash
     JSON.parse(@raw_body)
   end

@@ -14,8 +14,8 @@ class ActiveCollab::Client
   end
 
   def call(method, uri, params = {})
-    methods = %[Post Get Put]
-    method = methods.include?(method) ? method : 'Get'
+    method = %w[Post Get Put].include?(method) ? method : 'Get'
+    format = %w[hash json object].include?(params[:format]) ? params[:format] : 'hash'
     request = Object.const_get("Net::HTTP::#{method}").new(uri)
     request.set_form_data(params.except(:headers)) unless method == 'Get'
 
@@ -31,7 +31,7 @@ class ActiveCollab::Client
 
     return ActiveCollab::Response
       .new(response.body)
-      .to_hash
+      .send(:"to_#{format}")
   end
 
   def app_url(uri)
