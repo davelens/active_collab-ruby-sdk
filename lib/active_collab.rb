@@ -4,7 +4,7 @@ require 'uri'
 require 'active_support/all'
 
 module ActiveCollab
-  VERSION = '0.2.0'
+  VERSION = '0.2.1'
 
   require_relative 'active_collab/client.rb'
   require_relative 'active_collab/response.rb'
