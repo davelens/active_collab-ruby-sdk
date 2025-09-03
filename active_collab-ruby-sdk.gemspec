@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
 
   # Runtime dependencies (add if needed)
   spec.add_runtime_dependency 'json', '~> 2.12.2'
-  spec.add_runtime_dependency 'activesupport', '~> 7.2.2.1'
+  spec.add_runtime_dependency 'activesupport', '~> 6'
 
   # Development dependencies (optional)
   spec.add_development_dependency 'rspec', '~> 3.13.1'
