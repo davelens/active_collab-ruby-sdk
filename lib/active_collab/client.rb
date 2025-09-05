@@ -15,24 +15,30 @@ class ActiveCollab::Client
 
   def call(method, uri, params = {})
     method = %w[Post Get Put].include?(method) ? method : 'Get'
-    request = Object.const_get("Net::HTTP::#{method}").new(uri)
+    data = params.except(:headers, :format)
     format = if %w[hash json object].include?(params[:format])
                params[:format]
              else
                'hash'
              end
 
-    unless method == 'Get'
-      request.set_form_data(params.except(:headers, :format))
+    if method == 'Get' && data.present?
+      uri.query = [uri.query, data.to_query].compact.join('&')
+      request = Net::HTTP::Get.new(uri)
+    else
+      request = Object.const_get("Net::HTTP::#{method}").new(uri)
+      request.set_form_data(data) unless method == 'Get'
     end
 
     if @token
       request['X-Angie-AuthApiToken'] = @token
     end
 
-    req_options = { use_ssl: uri.scheme == "https", }
-
-    response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+    response = Net::HTTP.start(
+      request.uri.hostname,
+      request.uri.port,
+      { use_ssl: request.uri.scheme == "https" }
+    ) do |http|
       http.request(request)
     end
 

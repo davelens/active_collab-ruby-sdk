@@ -36,6 +36,27 @@ RSpec.describe ActiveCollab::Client do
     end
   end
 
+  describe '#get' do
+    it 'delegates to #call with Get' do
+      expect(subject).to receive(:call).with('Get', kind_of(URI), {})
+      subject.get('/projects')
+    end
+  end
+
+  describe '#post' do
+    it 'delegates to #call with Post' do
+      expect(subject).to receive(:call).with('Post', kind_of(URI), {})
+      subject.post('/projects')
+    end
+  end
+
+  describe '#put' do
+    it 'delegates to #call with Put' do
+      expect(subject).to receive(:call).with('Put', kind_of(URI), {})
+      subject.put('/projects')
+    end
+  end
+
   describe '#call' do
     let(:response_double) do
       instance_double(Net::HTTPResponse, body: '{"success": true}')
@@ -43,6 +64,26 @@ RSpec.describe ActiveCollab::Client do
 
     before do
       allow(Net::HTTP).to receive(:start) { response_double }
+    end
+
+    it 'defaults to Get for unsupported method' do
+      allow(ActiveCollab::Response).to receive(:new) do
+        double(to_hash: { success: true })
+      end
+      result = subject.call('Delete', URI('https://example.com/test'))
+      expect(result).to eq({ success: true })
+    end
+
+    it 'does not set token header if @token is nil' do
+      subject.instance_variable_set(:@token, nil)
+      uri_double = double(hostname: 'example.com', port: 443, scheme: 'https')
+      request_double = double(uri: uri_double)
+      allow(Object).to receive(:const_get).and_return(double(new: request_double))
+      allow(request_double).to receive(:set_form_data)
+      allow(Net::HTTP).to receive(:start) { double(body: '{}') }
+      allow(ActiveCollab::Response).to receive(:new) { double(to_hash: {}) }
+      expect(request_double).not_to receive(:[]=)
+      subject.call('Post', URI('https://example.com/test'))
     end
 
     it 'can make a HTTP call and parses the response with a hash by default' do
