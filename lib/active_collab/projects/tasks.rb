@@ -12,6 +12,12 @@ class ActiveCollab::Tasks
       .get("/projects/#{@project_id}/tasks", params)
   end
 
+  # These include completed tasks.
+  def archive(params = {})
+    @client
+      .get("/projects/#{@project_id}/tasks/archive", params)
+  end
+
   def get(id, params = {})
     @client
       .get("/projects/#{@project_id}/tasks/#{id}", params)
