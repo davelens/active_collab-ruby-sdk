@@ -26,7 +26,7 @@ class ActiveCollab::Tasks
       page += 1
     end
 
-    result = { tasks: all_tasks.flatten.sort_by { |t| -t['created_on'] } }
+    result = { 'tasks' => all_tasks.flatten.sort_by { |t| -t['created_on'] } }
     return result.to_json if params['format'] == 'json'
     result
   end
