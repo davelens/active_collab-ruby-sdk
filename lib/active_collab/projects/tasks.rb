@@ -14,8 +14,19 @@ class ActiveCollab::Tasks
 
   # These include completed tasks.
   def archive(params = {})
-    @client
-      .get("/projects/#{@project_id}/tasks/archive", params)
+    page = params['page'] || 1
+    all_tasks = []
+
+    loop do
+      response = @client
+        .get("/projects/#{@project_id}/tasks/archive", params.merge(page: page))
+      tasks = response || []
+      all_tasks += tasks
+      break if tasks.empty? || params.key?('page')
+      page += 1
+    end
+
+    { tasks: all_tasks.flatten.sort_by { |t| -t['created_on'] } }.to_json
   end
 
   def get(id, params = {})
