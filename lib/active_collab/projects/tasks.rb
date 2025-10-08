@@ -8,12 +8,28 @@ class ActiveCollab::Tasks
   # curl -i -H "X-Angie-AuthApiToken: <TOKEN>" \
   #   https://app.activecollab.com/167099/api/v1/projects/3/tasks
   def all(params = {})
+    temp_params = params.merge('format' => 'hash')
+    all_tasks = [active(temp_params)['tasks'] + archived(temp_params)['tasks']]
+    result = {
+      'tasks' => all_tasks
+        .flatten
+        .sort_by { |t| -t['created_on'] } || []
+    }
+
+    return result.to_json if params['format'] == 'json'
+    result
+  end
+
+  # Works:
+  # curl -i -H "X-Angie-AuthApiToken: <TOKEN>" \
+  #   https://app.activecollab.com/167099/api/v1/projects/3/tasks
+  def active(params = {})
     @client
       .get("/projects/#{@project_id}/tasks", params)
   end
 
   # These include completed tasks.
-  def archive(params = {})
+  def archived(params = {})
     page = params['page'] || 1
     all_tasks = []
 
