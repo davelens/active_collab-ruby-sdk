@@ -61,7 +61,7 @@ RSpec.describe ActiveCollab::Client do
 
   describe '#call' do
     let(:response_double) do
-      instance_double(Net::HTTPResponse, body: '{"success": true}')
+      instance_double(Net::HTTPResponse, body: '{"success": true}', code: '200')
     end
 
     before do
@@ -82,7 +82,7 @@ RSpec.describe ActiveCollab::Client do
       request_double = double(uri: uri_double)
       allow(Object).to receive(:const_get).and_return(double(new: request_double))
       allow(request_double).to receive(:set_form_data)
-      allow(Net::HTTP).to receive(:start) { double(body: '{}') }
+      allow(Net::HTTP).to receive(:start) { double(body: '{}', code: '200') }
       allow(ActiveCollab::Response).to receive(:new) { double(to_hash: {}) }
       expect(request_double).not_to receive(:[]=)
       subject.call('Post', URI('https://example.com/test'))
@@ -122,6 +122,48 @@ RSpec.describe ActiveCollab::Client do
 
       result = subject.call('Get', URI('https://example.com/test'), format: 'xml')
       expect(result).to eq({ success: true })
+    end
+
+    context 'error handling' do
+      it 'raises AuthenticationError on 401' do
+        allow(Net::HTTP).to receive(:start) { double(body: 'Unauthorized', code: '401') }
+        expect {
+          subject.call('Get', URI('https://example.com/test'))
+        }.to raise_error(ActiveCollab::AuthenticationError) { |e|
+          expect(e.status).to eq(401)
+          expect(e.body).to eq('Unauthorized')
+        }
+      end
+
+      it 'raises NotFoundError on 404' do
+        allow(Net::HTTP).to receive(:start) { double(body: 'Not Found', code: '404') }
+        expect {
+          subject.call('Get', URI('https://example.com/test'))
+        }.to raise_error(ActiveCollab::NotFoundError)
+      end
+
+      it 'raises RateLimitError on 429' do
+        allow(Net::HTTP).to receive(:start) { double(body: 'Too Many Requests', code: '429') }
+        expect {
+          subject.call('Get', URI('https://example.com/test'))
+        }.to raise_error(ActiveCollab::RateLimitError)
+      end
+
+      it 'raises APIError on other 4xx/5xx statuses' do
+        allow(Net::HTTP).to receive(:start) { double(body: 'Server Error', code: '500') }
+        expect {
+          subject.call('Get', URI('https://example.com/test'))
+        }.to raise_error(ActiveCollab::APIError) { |e|
+          expect(e.status).to eq(500)
+        }
+      end
+
+      it 'does not raise on successful responses' do
+        allow(ActiveCollab::Response).to receive(:new) { double(to_hash: {}) }
+        expect {
+          subject.call('Get', URI('https://example.com/test'))
+        }.not_to raise_error
+      end
     end
   end
 

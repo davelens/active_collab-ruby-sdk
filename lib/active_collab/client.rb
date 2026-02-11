@@ -46,6 +46,8 @@ class ActiveCollab::Client
       http.request(request)
     end
 
+    handle_response_errors!(response)
+
     format_method = { 'hash' => :to_hash, 'json' => :to_json_string, 'object' => :to_object }
     ActiveCollab::Response
       .new(response.body)
@@ -107,6 +109,23 @@ class ActiveCollab::Client
   ############################################################################
 
   private
+
+  def handle_response_errors!(response)
+    status = response.code.to_i
+    return if status < 400
+
+    body = response.body
+    message = "API request failed with status #{status}"
+
+    error_class = case status
+                  when 401 then ActiveCollab::AuthenticationError
+                  when 404 then ActiveCollab::NotFoundError
+                  when 429 then ActiveCollab::RateLimitError
+                  else ActiveCollab::APIError
+                  end
+
+    raise error_class.new(message, status: status, body: body)
+  end
 
   def issue_token_intent(opts = {})
     response = post(
