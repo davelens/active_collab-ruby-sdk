@@ -168,6 +168,13 @@ class ActiveCollab::Client
     ActiveCollab::Projects.new(self)
   end
 
+  # Returns a Users resource for accessing user endpoints.
+  #
+  # @return [ActiveCollab::Users]
+  def users
+    ActiveCollab::Users.new(self)
+  end
+
   private
 
   def handle_response_errors!(response)

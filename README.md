@@ -118,11 +118,9 @@ time_records.create(value: 1.5, user_id: 10, job_type_id: 1)
 
 ### Users
 
-_The Users resource is available as `ActiveCollab::Users` but is not yet
-exposed as a convenience method on the client. Use the class directly:_
-
 ```ruby
-users = ActiveCollab::Users.new(client).all
+# List all users
+users = client.users.all
 ```
 
 ### Response Formats

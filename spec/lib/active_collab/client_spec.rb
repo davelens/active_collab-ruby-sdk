@@ -202,7 +202,7 @@ RSpec.describe ActiveCollab::Client do
   end
 
   it 'makes a few namespaces available' do
-    expect(subject).to respond_to(:projects)
+    expect(subject).to respond_to(:projects, :users)
   end
 
 end
