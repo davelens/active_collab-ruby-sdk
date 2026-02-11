@@ -1,34 +1,25 @@
 # ActiveCollab Ruby SDK
-
-A Ruby SDK for the [ActiveCollab](https://activecollab.com/) API. Provides a
-clean interface for authentication, project management, task tracking, time
-records, and more.
+A Ruby SDK for the [ActiveCollab](https://activecollab.com/) API. Provides a clean interface for authentication, project management, task tracking, time records, and more.
 
 ## Requirements
-
 - Ruby >= 3.1
 - An ActiveCollab account with API access
 
 ## Installation
-
 Add to your Gemfile:
-
 ```ruby
 gem 'active_collab-ruby-sdk', '~> 0.3'
 ```
 
 Or install directly:
-
 ```
 gem install active_collab-ruby-sdk
 ```
 
 ## Authentication
-
 The SDK supports two authentication methods.
 
 ### Token-based (if you already have a token)
-
 ```ruby
 require 'active_collab'
 
@@ -39,7 +30,6 @@ client = ActiveCollab::Client.new(
 ```
 
 ### Credential-based (username/password)
-
 ```ruby
 client = ActiveCollab::Client.new(
   account_id: '12345',
@@ -57,9 +47,7 @@ The token is stored on the client instance and sent as the
 `X-Angie-AuthApiToken` header on all subsequent requests.
 
 ## Usage
-
 ### Projects
-
 ```ruby
 # List all projects (returns a Hash by default)
 client.projects.all
@@ -72,7 +60,6 @@ client.projects.all(format: 'object')
 ```
 
 ### Tasks
-
 ```ruby
 tasks = client.projects.tasks(project_id)
 
@@ -99,13 +86,11 @@ tasks.time_records(task_id)
 ```
 
 ### Task Lists
-
 ```ruby
 client.projects.task_lists(project_id).all
 ```
 
 ### Time Records
-
 ```ruby
 time_records = client.projects.time_records(project_id)
 
@@ -117,14 +102,12 @@ time_records.create(value: 1.5, user_id: 10, job_type_id: 1)
 ```
 
 ### Users
-
 ```ruby
 # List all users
 users = client.users.all
 ```
 
 ### Response Formats
-
 All resource methods accept a `format` parameter:
 
 | Format     | Return type | Description                  |
@@ -139,7 +122,6 @@ client.projects.all(format: 'object') # => #<OpenStruct projects=[...]>
 ```
 
 ### Token Object
-
 ```ruby
 token = client.token
 token.value        # => "your-api-token"
@@ -147,14 +129,12 @@ token.auth_header  # => { "X-Angie-AuthApiToken": "your-api-token" }
 ```
 
 ### URL Helpers
-
 ```ruby
 # Build an app URL (for linking to the ActiveCollab web UI)
 client.app_url('/projects/3') # => URI("https://next-app.activecollab.com/12345/projects/3")
 ```
 
 ## Error Handling
-
 The SDK raises specific exceptions for API errors:
 
 ```ruby
@@ -178,22 +158,16 @@ end
 ```
 
 ## Development
-
 ```
 git clone https://github.com/davelens/active_collab-ruby-sdk.git
 cd active_collab-ruby-sdk
 bundle install
-bundle exec rake     # runs the test suite
 ```
 
-## Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b feature/my-feature`)
-3. Commit your changes (`git commit -am 'Add my feature'`)
-4. Push to the branch (`git push origin feature/my-feature`)
-5. Create a Pull Request
+Running tests:
+```
+bundle exec rake
+```
 
 ## License
-
-Released under the [MIT License](LICENSE).
+[MIT](LICENSE)
