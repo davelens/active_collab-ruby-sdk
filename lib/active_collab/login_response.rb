@@ -14,14 +14,14 @@ class ActiveCollab::LoginResponse
     return @account unless @account.nil?
 
     @account = accounts.detect do |account|
-      account.dig('name').to_s == @account_id.to_s
+      account['name'].to_s == @account_id.to_s
     end
 
     @account
   end
 
   def call_url
-    account_info.dig('url')
+    account_info['url']
   end
 
   def intent

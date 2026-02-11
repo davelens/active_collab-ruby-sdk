@@ -137,7 +137,7 @@ class ActiveCollab::Client
       intent: opts[:intent]
     )
 
-    ActiveCollab::Token.new(response.dig('token'))
+    ActiveCollab::Token.new(response['token'])
   end
 
   def login
