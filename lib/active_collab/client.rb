@@ -112,13 +112,9 @@ class ActiveCollab::Client
     ActiveCollab::Token.new(@token)
   end
 
-  ############################################################################
-
   def projects
     ActiveCollab::Projects.new(self)
   end
-
-  ############################################################################
 
   private
 
