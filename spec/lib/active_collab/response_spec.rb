@@ -46,6 +46,13 @@ RSpec.describe ActiveCollab::Response do
       response = described_class.new('{"foo":"bar"}')
       expect(response.to_hash).to eq({ 'foo' => 'bar' })
     end
+
+    it 'raises ParseError on invalid JSON' do
+      response = described_class.new('<html>Error</html>')
+      expect { response.to_hash }.to raise_error(ActiveCollab::ParseError) { |e|
+        expect(e.body).to eq('<html>Error</html>')
+      }
+    end
   end
 
   describe '#to_object' do

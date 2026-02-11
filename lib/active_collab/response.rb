@@ -16,6 +16,11 @@ class ActiveCollab::Response
 
   def to_hash
     JSON.parse(@raw_body)
+  rescue JSON::ParserError => e
+    raise ActiveCollab::ParseError.new(
+      "Failed to parse response body as JSON: #{e.message}",
+      body: @raw_body
+    )
   end
 
   def to_object
