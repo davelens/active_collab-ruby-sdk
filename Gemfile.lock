@@ -3,7 +3,7 @@ PATH
   specs:
     active_collab-ruby-sdk (0.3.0)
       activesupport (>= 7, < 9)
-      json (~> 2.18)
+      json (~> 2.10)
 
 GEM
   remote: https://rubygems.org/
@@ -48,6 +48,7 @@ GEM
     psych (5.3.1)
       date
       stringio
+    rake (13.3.1)
     rdoc (7.2.0)
       erb
       psych (>= 4.0.0)
@@ -81,6 +82,7 @@ PLATFORMS
 DEPENDENCIES
   active_collab-ruby-sdk!
   irb (~> 1.17)
+  rake (~> 13.0)
   rspec (~> 3.13)
 
 BUNDLED WITH
