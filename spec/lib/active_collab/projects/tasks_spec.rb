@@ -26,10 +26,10 @@ RSpec.describe ActiveCollab::Tasks do
       page2 = []
 
       expect(client).to receive(:get)
-        .with("/projects/#{project_id}/tasks/archive", { page: 1 })
+        .with("/projects/#{project_id}/tasks/archive", { 'page' => 1 })
         .and_return(page1)
       expect(client).to receive(:get)
-        .with("/projects/#{project_id}/tasks/archive", { page: 2 })
+        .with("/projects/#{project_id}/tasks/archive", { 'page' => 2 })
         .and_return(page2)
 
       result = subject.archived
@@ -40,7 +40,7 @@ RSpec.describe ActiveCollab::Tasks do
       page_data = [{ 'id' => 1, 'created_on' => 100 }]
 
       expect(client).to receive(:get)
-        .with("/projects/#{project_id}/tasks/archive", { 'page' => 2, page: 2 })
+        .with("/projects/#{project_id}/tasks/archive", { 'page' => 2 })
         .and_return(page_data)
 
       result = subject.archived('page' => 2)
@@ -81,7 +81,7 @@ RSpec.describe ActiveCollab::Tasks do
 
       # Second page returns empty to stop pagination
       allow(client).to receive(:get)
-        .with("/projects/#{project_id}/tasks/archive", hash_including(page: 2))
+        .with("/projects/#{project_id}/tasks/archive", hash_including('page' => 2))
         .and_return([])
     end
 

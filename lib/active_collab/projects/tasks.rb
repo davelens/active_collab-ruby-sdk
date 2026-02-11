@@ -37,7 +37,7 @@ class ActiveCollab::Tasks
 
     loop do
       response = @client
-        .get("/projects/#{@project_id}/tasks/archive", params.merge(page: page))
+        .get("/projects/#{@project_id}/tasks/archive", params.merge('page' => page))
       tasks = response || []
       all_tasks += tasks
       break if tasks.empty? || params.key?('page')
