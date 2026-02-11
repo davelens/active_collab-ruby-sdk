@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'lib/active_collab'
+require_relative 'lib/active_collab/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'active_collab-ruby-sdk'

@@ -7,8 +7,7 @@ require 'active_support/core_ext/object/blank'
 require 'active_support/core_ext/object/to_query'
 
 module ActiveCollab
-  VERSION = '0.2.2'
-
+  require_relative 'active_collab/version.rb'
   require_relative 'active_collab/client.rb'
   require_relative 'active_collab/response.rb'
   require_relative 'active_collab/login_response.rb'
