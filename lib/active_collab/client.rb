@@ -12,13 +12,19 @@ class ActiveCollab::Client
     account_id: ''
   }.freeze
 
+  HTTP_METHODS = {
+    'Get'  => Net::HTTP::Get,
+    'Post' => Net::HTTP::Post,
+    'Put'  => Net::HTTP::Put
+  }.freeze
+
   def initialize(options = {})
     @token = options[:token]
     @options = DEFAULTS.merge(options)
   end
 
   def call(method, uri, params = {})
-    method = %w[Post Get Put].include?(method) ? method : 'Get'
+    method = HTTP_METHODS.key?(method) ? method : 'Get'
     data = params.except(:headers, :format)
     format = if %w[hash json object].include?(params[:format])
                params[:format]
@@ -30,7 +36,7 @@ class ActiveCollab::Client
       uri.query = [uri.query, data.to_query].compact.join('&')
       request = Net::HTTP::Get.new(uri)
     else
-      request = Object.const_get("Net::HTTP::#{method}").new(uri)
+      request = HTTP_METHODS[method].new(uri)
       request.set_form_data(data) unless method == 'Get'
     end
 
