@@ -62,13 +62,13 @@ The token is stored on the client instance and sent as the
 
 ```ruby
 # List all projects (returns a Hash by default)
-projects = client.projects.all
+client.projects.all
 
 # Get projects as a JSON string
-json = client.projects.all(format: 'json')
+client.projects.all(format: 'json')
 
 # Get projects as an OpenStruct
-projects = client.projects.all(format: 'object')
+client.projects.all(format: 'object')
 ```
 
 ### Tasks
@@ -77,31 +77,31 @@ projects = client.projects.all(format: 'object')
 tasks = client.projects.tasks(project_id)
 
 # All tasks (active + archived, sorted by created_on desc)
-all = tasks.all
+tasks.all
 
 # Active tasks only
-active = tasks.active
+tasks.active
 
 # Archived tasks (auto-paginates through all pages)
-archived = tasks.archived
+tasks.archived
 
 # Archived tasks for a specific page (no auto-pagination)
-page2 = tasks.archived('page' => 2)
+tasks.archived('page' => 2)
 
 # Find a single task
-task = tasks.find(task_id)
+tasks.find(task_id)
 
 # Update a task
 tasks.update(task_id, name: 'New name')
 
 # Time records for a specific task
-records = tasks.time_records(task_id)
+tasks.time_records(task_id)
 ```
 
 ### Task Lists
 
 ```ruby
-task_lists = client.projects.task_lists(project_id).all
+client.projects.task_lists(project_id).all
 ```
 
 ### Time Records
@@ -110,7 +110,7 @@ task_lists = client.projects.task_lists(project_id).all
 time_records = client.projects.time_records(project_id)
 
 # List all time records for a project
-records = time_records.all
+time_records.all
 
 # Create a new time record
 time_records.create(value: 1.5, user_id: 10, job_type_id: 1)
@@ -175,17 +175,6 @@ rescue ActiveCollab::ParseError => e
   # Response body was not valid JSON
   puts e.body # => the raw unparseable body
 end
-```
-
-Exception hierarchy:
-
-```
-ActiveCollab::Error
-  ActiveCollab::APIError          (has #status and #body)
-    ActiveCollab::AuthenticationError
-    ActiveCollab::NotFoundError
-    ActiveCollab::RateLimitError
-  ActiveCollab::ParseError        (has #body)
 ```
 
 ## Development
