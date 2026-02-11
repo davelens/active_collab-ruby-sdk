@@ -9,7 +9,7 @@ class ActiveCollab::Token
 
   def header
     {
-      'X-Angie-Authapitoken': @value
+      'X-Angie-AuthApiToken': @value
     }
   end
 

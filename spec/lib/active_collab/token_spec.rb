@@ -15,7 +15,7 @@ RSpec.describe ActiveCollab::Token do
 
   describe '#header' do
     it 'returns a hash with the auth header' do
-      expect(subject.header).to eq({ 'X-Angie-Authapitoken': token_value })
+      expect(subject.header).to eq({ 'X-Angie-AuthApiToken': token_value })
     end
   end
 
