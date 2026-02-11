@@ -18,6 +18,10 @@ class ActiveCollab::Client
     'Put'  => Net::HTTP::Put
   }.freeze
 
+  APP_URL     = 'https://next-app.activecollab.com'
+  API_URL     = 'https://app.activecollab.com'
+  AUTH_URL    = 'https://activecollab.com/api/v1'
+
   def initialize(options = {})
     @token = options[:token]
     @options = DEFAULTS.merge(options)
@@ -63,14 +67,14 @@ class ActiveCollab::Client
   end
 
   def app_url(uri)
-    URI.parse("https://next-app.activecollab.com/#{@options[:account_id]}#{uri}")
+    URI.parse("#{APP_URL}/#{@options[:account_id]}#{uri}")
   end
 
   def call_url(uri)
     url = if uri.include?('/external/login')
-            "https://activecollab.com/api/v1#{uri}"
+            "#{AUTH_URL}#{uri}"
           else
-            "https://app.activecollab.com/#{@options[:account_id]}/api/v1#{uri}"
+            "#{API_URL}/#{@options[:account_id]}/api/v1#{uri}"
           end
 
     URI.parse(url)
