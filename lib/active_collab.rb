@@ -1,7 +1,10 @@
 require 'json'
 require 'net/http'
 require 'uri'
-require 'active_support/all'
+require 'active_support/core_ext/hash/except'
+require 'active_support/core_ext/hash/reverse_merge'
+require 'active_support/core_ext/object/blank'
+require 'active_support/core_ext/object/to_query'
 
 module ActiveCollab
   VERSION = '0.2.2'

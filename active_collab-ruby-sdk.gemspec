@@ -20,11 +20,7 @@ Gem::Specification.new do |spec|
   # Ruby version requirement (optional but recommended)
   spec.required_ruby_version = '>= 3.1'
 
-  # Runtime dependencies (add if needed)
-  spec.add_runtime_dependency 'json', '~> 2.13.2'
-  spec.add_runtime_dependency 'activesupport', '~> 7'
-
-  # Development dependencies (optional)
-  spec.add_development_dependency 'rspec', '~> 3.13.1'
-  spec.add_development_dependency 'irb', '~> 1.15.2'
+  # Runtime dependencies
+  spec.add_runtime_dependency 'json', '~> 2.18'
+  spec.add_runtime_dependency 'activesupport', '>= 7', '< 9'
 end
