@@ -41,7 +41,9 @@ class ActiveCollab::Client
     response = Net::HTTP.start(
       request.uri.hostname,
       request.uri.port,
-      { use_ssl: request.uri.scheme == "https" }
+      use_ssl: request.uri.scheme == "https",
+      open_timeout: 30,
+      read_timeout: 30
     ) do |http|
       http.request(request)
     end
