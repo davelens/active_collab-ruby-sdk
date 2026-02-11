@@ -18,7 +18,7 @@ class ActiveCollab::Tasks
         .sort_by { |t| -t['created_on'] } || []
     }
 
-    return result.to_json if params['format'] == 'json'
+    return JSON.generate(result) if params['format'] == 'json'
     result
   end
 
@@ -45,7 +45,7 @@ class ActiveCollab::Tasks
     end
 
     result = { 'tasks' => all_tasks.flatten.sort_by { |t| -t['created_on'] } }
-    return result.to_json if params['format'] == 'json'
+    return JSON.generate(result) if params['format'] == 'json'
     result
   end
 

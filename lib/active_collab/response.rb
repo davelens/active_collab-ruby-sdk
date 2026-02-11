@@ -10,7 +10,7 @@ class ActiveCollab::Response
     @raw_body = '{}' if raw_body == '' || raw_body.nil?
   end
 
-  def to_json
+  def to_json_string
     @raw_body
   end
 

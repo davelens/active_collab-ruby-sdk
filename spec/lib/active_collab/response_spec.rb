@@ -24,15 +24,15 @@ RSpec.describe ActiveCollab::Response do
     end
   end
 
-  describe '#to_json' do
+  describe '#to_json_string' do
     it 'returns the raw JSON string' do
       response = described_class.new('{"foo":"bar"}')
-      expect(response.to_json).to eq('{"foo":"bar"}')
+      expect(response.to_json_string).to eq('{"foo":"bar"}')
     end
 
     it 'returns empty JSON object string when body was nil' do
       response = described_class.new(nil)
-      expect(response.to_json).to eq('{}')
+      expect(response.to_json_string).to eq('{}')
     end
   end
 

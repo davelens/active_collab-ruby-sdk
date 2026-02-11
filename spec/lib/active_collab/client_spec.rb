@@ -99,7 +99,7 @@ RSpec.describe ActiveCollab::Client do
 
     it 'can make a HTTP call and parses the response as json when chosen' do
       allow(ActiveCollab::Response).to receive(:new) do
-        double(to_json: { success: true })
+        double(to_json_string: { success: true })
       end
 
       result = subject.call('Get', URI('https://example.com/test'), format: 'json')

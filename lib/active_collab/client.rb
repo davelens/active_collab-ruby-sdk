@@ -46,9 +46,10 @@ class ActiveCollab::Client
       http.request(request)
     end
 
-    return ActiveCollab::Response
+    format_method = { 'hash' => :to_hash, 'json' => :to_json_string, 'object' => :to_object }
+    ActiveCollab::Response
       .new(response.body)
-      .send(:"to_#{format}")
+      .send(format_method[format])
   end
 
   def app_url(uri)
