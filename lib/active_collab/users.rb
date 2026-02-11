@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ActiveCollab::Users
   def initialize(client)
     @client = client

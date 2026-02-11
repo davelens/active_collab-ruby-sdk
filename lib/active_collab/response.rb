@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ActiveCollab::Response
   attr_reader :raw_body
 

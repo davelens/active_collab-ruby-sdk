@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ActiveCollab::Token
   attr_reader :value
 

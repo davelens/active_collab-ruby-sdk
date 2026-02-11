@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Info about the, quite undocumented!, necessary auth calls:
 # https://github.com/activecollab/activecollab-feather-sdk/issues/35
 class ActiveCollab::Client

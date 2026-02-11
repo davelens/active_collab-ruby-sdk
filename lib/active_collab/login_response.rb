@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ActiveCollab::LoginResponse
   def initialize(values, account_id: nil)
     @values = values

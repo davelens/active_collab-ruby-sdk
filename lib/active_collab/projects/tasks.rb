@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ActiveCollab::Tasks
   def initialize(client, project_id)
     @client = client
