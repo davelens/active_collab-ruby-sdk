@@ -4,15 +4,17 @@
 # https://github.com/activecollab/activecollab-feather-sdk/issues/35
 class ActiveCollab::Client
 
+  DEFAULTS = {
+    username: '',
+    password: '',
+    client_vendor: '',
+    client_name: '',
+    account_id: ''
+  }.freeze
+
   def initialize(options = {})
     @token = options[:token]
-    @options = options.reverse_merge!(
-      username: '',
-      password: '',
-      client_vendor: '',
-      client_name: '',
-      account_id: ''
-    )
+    @options = DEFAULTS.merge(options)
   end
 
   def call(method, uri, params = {})
