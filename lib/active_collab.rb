@@ -14,8 +14,8 @@ module ActiveCollab
   require_relative 'active_collab/login_response'
   require_relative 'active_collab/token'
   require_relative 'active_collab/projects'
-  require_relative 'active_collab/projects/task_lists'
-  require_relative 'active_collab/projects/tasks'
+  require_relative 'active_collab/task_lists'
+  require_relative 'active_collab/tasks'
   require_relative 'active_collab/time_records'
   require_relative 'active_collab/users'
 end
