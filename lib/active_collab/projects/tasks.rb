@@ -49,7 +49,7 @@ class ActiveCollab::Tasks
     result
   end
 
-  def get(id, params = {})
+  def find(id, params = {})
     @client
       .get("/projects/#{@project_id}/tasks/#{id}", params)
   end

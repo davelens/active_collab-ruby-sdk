@@ -98,15 +98,15 @@ RSpec.describe ActiveCollab::Tasks do
     end
   end
 
-  describe '#get' do
+  describe '#find' do
     it 'fetches a single task by id' do
       expect(client).to receive(:get).with("/projects/#{project_id}/tasks/7", {})
-      subject.get(7)
+      subject.find(7)
     end
 
     it 'passes params to the client' do
       expect(client).to receive(:get).with("/projects/#{project_id}/tasks/7", { format: 'json' })
-      subject.get(7, format: 'json')
+      subject.find(7, format: 'json')
     end
   end
 

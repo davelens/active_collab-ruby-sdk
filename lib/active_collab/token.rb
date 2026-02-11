@@ -7,13 +7,9 @@ class ActiveCollab::Token
     @value = value
   end
 
-  def header
+  def auth_header
     {
       'X-Angie-AuthApiToken': @value
     }
-  end
-
-  def raw
-    @value
   end
 end

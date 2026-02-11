@@ -5,7 +5,7 @@ class ActiveCollab::Projects
     @client = client
   end
 
-  def list(params = {})
+  def all(params = {})
     @client.get('/projects', params)
   end
 

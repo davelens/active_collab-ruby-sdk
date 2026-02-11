@@ -7,15 +7,15 @@ RSpec.describe ActiveCollab::Projects do
 
   subject { described_class.new(client) }
 
-  describe '#list' do
+  describe '#all' do
     it 'delegates to client#get with /projects' do
       expect(client).to receive(:get).with('/projects', {})
-      subject.list
+      subject.all
     end
 
     it 'passes params to the client' do
       expect(client).to receive(:get).with('/projects', { format: 'json' })
-      subject.list(format: 'json')
+      subject.all(format: 'json')
     end
   end
 

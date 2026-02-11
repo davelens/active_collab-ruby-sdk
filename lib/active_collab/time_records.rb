@@ -11,7 +11,7 @@ class ActiveCollab::TimeRecords
       .get("/projects/#{@project_id}/time-records", params)
   end
 
-  def push(params = {})
+  def create(params = {})
     @client
       .post("/projects/#{@project_id}/time-records", params)
   end

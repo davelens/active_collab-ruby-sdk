@@ -20,11 +20,11 @@ RSpec.describe ActiveCollab::TimeRecords do
     end
   end
 
-  describe '#push' do
+  describe '#create' do
     it 'creates a time record via POST' do
       params = { value: 1.5, user_id: 10, job_type_id: 1 }
       expect(client).to receive(:post).with("/projects/#{project_id}/time-records", params)
-      subject.push(params)
+      subject.create(params)
     end
   end
 end
