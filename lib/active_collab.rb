@@ -8,6 +8,7 @@ require 'active_support/core_ext/object/to_query'
 
 module ActiveCollab
   require_relative 'active_collab/version'
+  require_relative 'active_collab/errors'
   require_relative 'active_collab/client'
   require_relative 'active_collab/response'
   require_relative 'active_collab/login_response'
