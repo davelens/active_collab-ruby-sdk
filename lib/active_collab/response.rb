@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'ostruct'
+
 class ActiveCollab::Response
   attr_reader :raw_body
 
