@@ -22,6 +22,18 @@ RSpec.describe ActiveCollab::Response do
     end
   end
 
+  describe '#to_json' do
+    it 'returns the raw JSON string' do
+      response = described_class.new('{"foo":"bar"}')
+      expect(response.to_json).to eq('{"foo":"bar"}')
+    end
+
+    it 'returns empty JSON object string when body was nil' do
+      response = described_class.new(nil)
+      expect(response.to_json).to eq('{}')
+    end
+  end
+
   describe '#to_hash' do
     it 'defaults to an empty hash' do
       response = described_class.new(nil)
