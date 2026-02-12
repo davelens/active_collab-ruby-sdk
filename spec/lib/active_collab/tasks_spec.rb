@@ -22,14 +22,14 @@ RSpec.describe ActiveCollab::Tasks do
 
   describe '#archived' do
     it 'fetches archived tasks and paginates until empty' do
-      page1 = [{ 'id' => 1, 'created_on' => 100 }]
-      page2 = []
+      page1 = { 'tasks' => [{ 'id' => 1, 'created_on' => 100 }] }
+      page2 = { 'tasks' => [] }
 
       expect(client).to receive(:get)
-        .with("/projects/#{project_id}/tasks/archive", { 'page' => 1 })
+        .with("/projects/#{project_id}/tasks/archive", { page: 1 })
         .and_return(page1)
       expect(client).to receive(:get)
-        .with("/projects/#{project_id}/tasks/archive", { 'page' => 2 })
+        .with("/projects/#{project_id}/tasks/archive", { page: 2 })
         .and_return(page2)
 
       result = subject.archived
@@ -37,10 +37,10 @@ RSpec.describe ActiveCollab::Tasks do
     end
 
     it 'does not paginate when a page param is explicitly given' do
-      page_data = [{ 'id' => 1, 'created_on' => 100 }]
+      page_data = { 'tasks' => [{ 'id' => 1, 'created_on' => 100 }] }
 
       expect(client).to receive(:get)
-        .with("/projects/#{project_id}/tasks/archive", { 'page' => 2 })
+        .with("/projects/#{project_id}/tasks/archive", { page: 2 })
         .and_return(page_data)
 
       result = subject.archived('page' => 2)
@@ -48,41 +48,56 @@ RSpec.describe ActiveCollab::Tasks do
     end
 
     it 'returns JSON when format is json' do
-      expect(client).to receive(:get).and_return([])
+      expect(client).to receive(:get).and_return({ 'tasks' => [] })
 
       result = subject.archived('format' => 'json')
       expect(result).to be_a(String)
       expect(JSON.parse(result)).to eq({ 'tasks' => [] })
     end
 
+    it 'returns JSON when format is json with symbol key' do
+      expect(client).to receive(:get).and_return({ 'tasks' => [] })
+
+      result = subject.archived(format: 'json')
+      expect(result).to be_a(String)
+      expect(JSON.parse(result)).to eq({ 'tasks' => [] })
+    end
+
     it 'sorts tasks by created_on descending' do
-      tasks = [
+      tasks = { 'tasks' => [
         { 'id' => 1, 'created_on' => 100 },
         { 'id' => 2, 'created_on' => 300 },
         { 'id' => 3, 'created_on' => 200 }
-      ]
+      ] }
       expect(client).to receive(:get).and_return(tasks)
-      expect(client).to receive(:get).and_return([])
+      expect(client).to receive(:get).and_return({ 'tasks' => [] })
 
       result = subject.archived
       expect(result['tasks'].map { |t| t['id'] }).to eq([2, 3, 1])
+    end
+
+    it 'handles non-Hash responses gracefully' do
+      expect(client).to receive(:get).and_return('')
+
+      result = subject.archived
+      expect(result).to eq({ 'tasks' => [] })
     end
   end
 
   describe '#all' do
     before do
       allow(client).to receive(:get)
-        .with("/projects/#{project_id}/tasks", hash_including('format' => 'hash'))
+        .with("/projects/#{project_id}/tasks", hash_including(format: 'hash'))
         .and_return({ 'tasks' => [{ 'id' => 1, 'created_on' => 200 }] })
 
       allow(client).to receive(:get)
-        .with("/projects/#{project_id}/tasks/archive", hash_including('format' => 'hash'))
-        .and_return([{ 'id' => 2, 'created_on' => 100 }])
+        .with("/projects/#{project_id}/tasks/archive", hash_including(format: 'hash', page: 1))
+        .and_return({ 'tasks' => [{ 'id' => 2, 'created_on' => 100 }] })
 
       # Second page returns empty to stop pagination
       allow(client).to receive(:get)
-        .with("/projects/#{project_id}/tasks/archive", hash_including('page' => 2))
-        .and_return([])
+        .with("/projects/#{project_id}/tasks/archive", hash_including(format: 'hash', page: 2))
+        .and_return({ 'tasks' => [] })
     end
 
     it 'combines active and archived tasks sorted by created_on descending' do
@@ -90,8 +105,15 @@ RSpec.describe ActiveCollab::Tasks do
       expect(result['tasks'].map { |t| t['id'] }).to eq([1, 2])
     end
 
-    it 'returns JSON when format is json' do
+    it 'returns JSON when format is json with string key' do
       result = subject.all('format' => 'json')
+      expect(result).to be_a(String)
+      parsed = JSON.parse(result)
+      expect(parsed).to have_key('tasks')
+    end
+
+    it 'returns JSON when format is json with symbol key' do
+      result = subject.all(format: 'json')
       expect(result).to be_a(String)
       parsed = JSON.parse(result)
       expect(parsed).to have_key('tasks')

@@ -12,18 +12,17 @@ class ActiveCollab::Tasks
   # Returns all tasks (active + archived), sorted by created_on descending.
   #
   # @param params [Hash] query parameters
-  # @option params [String] 'format' response format ('hash' or 'json')
+  # @option params [String] :format response format ('hash' or 'json')
   # @return [Hash, String] a hash with a 'tasks' key, or JSON string
   def all(params = {})
-    temp_params = params.merge('format' => 'hash')
-    all_tasks = [active(temp_params)['tasks'] + archived(temp_params)['tasks']]
+    params = params.transform_keys(&:to_sym)
+    temp_params = params.merge(format: 'hash')
+    all_tasks = active(temp_params)['tasks'] + archived(temp_params)['tasks']
     result = {
-      'tasks' => all_tasks
-        .flatten
-        .sort_by { |t| -t['created_on'] } || []
+      'tasks' => all_tasks.sort_by { |t| -t['created_on'] }
     }
 
-    return JSON.generate(result) if params['format'] == 'json'
+    return JSON.generate(result) if params[:format] == 'json'
     result
   end
 
@@ -41,24 +40,33 @@ class ActiveCollab::Tasks
   # Auto-paginates through all pages unless a specific page is requested.
   #
   # @param params [Hash] query parameters
-  # @option params [Integer] 'page' specific page to fetch (disables auto-pagination)
-  # @option params [String] 'format' response format ('hash' or 'json')
+  # @option params [Integer] :page specific page to fetch (disables auto-pagination)
+  # @option params [String] :format response format ('hash' or 'json')
   # @return [Hash, String] a hash with a 'tasks' key, or JSON string
   def archived(params = {})
-    page = params['page'] || 1
+    params = params.transform_keys(&:to_sym)
+    page = params[:page] || 1
     all_tasks = []
 
     loop do
       response = @client
-        .get("/projects/#{@project_id}/tasks/archive", params.merge('page' => page))
-      tasks = response || []
+        .get("/projects/#{@project_id}/tasks/archive", params.merge(page: page))
+
+      tasks = if response.is_a?(Hash)
+                Array(response['tasks'])
+              elsif response.is_a?(Array)
+                response
+              else
+                []
+              end
+
       all_tasks += tasks
-      break if tasks.empty? || params.key?('page')
+      break if tasks.empty? || params.key?(:page)
       page += 1
     end
 
-    result = { 'tasks' => all_tasks.flatten.sort_by { |t| -t['created_on'] } }
-    return JSON.generate(result) if params['format'] == 'json'
+    result = { 'tasks' => all_tasks.sort_by { |t| -t['created_on'] } }
+    return JSON.generate(result) if params[:format] == 'json'
     result
   end
 
