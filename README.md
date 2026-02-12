@@ -43,8 +43,7 @@ client = ActiveCollab::Client.new(
 client.request_token!
 ```
 
-The token is stored on the client instance and sent as the
-`X-Angie-AuthApiToken` header on all subsequent requests.
+The token is stored on the client instance and sent as the `X-Angie-AuthApiToken` header on all subsequent requests.
 
 ## Usage
 ### Projects
@@ -75,7 +74,7 @@ tasks.archived
 # Archived tasks for a specific page (no auto-pagination)
 tasks.archived('page' => 2)
 
-# Find a single task
+# Find a single task - includes comments!
 tasks.find(task_id)
 
 # Update a task
