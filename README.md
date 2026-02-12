@@ -1,4 +1,7 @@
 # ActiveCollab Ruby SDK
+
+[![CI](https://github.com/davelens/active_collab-ruby-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/davelens/active_collab-ruby-sdk/actions/workflows/ci.yml)
+
 A Ruby SDK for the [ActiveCollab](https://activecollab.com/) API. Provides a clean interface for authentication, project management, task tracking, time records, and more.
 
 ## Requirements
