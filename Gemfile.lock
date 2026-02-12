@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    active_collab-ruby-sdk (0.3.2)
+    active_collab-ruby-sdk (0.3.3)
       activesupport (>= 7, < 9)
       json (~> 2.10)
       ostruct

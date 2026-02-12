@@ -22,8 +22,8 @@ RSpec.describe ActiveCollab::Tasks do
 
   describe '#archived' do
     it 'fetches archived tasks and paginates until empty' do
-      page1 = { 'tasks' => [{ 'id' => 1, 'created_on' => 100 }] }
-      page2 = { 'tasks' => [] }
+      page1 = [{ 'id' => 1, 'created_on' => 100 }]
+      page2 = []
 
       expect(client).to receive(:get)
         .with("/projects/#{project_id}/tasks/archive", { page: 1 })
@@ -37,7 +37,7 @@ RSpec.describe ActiveCollab::Tasks do
     end
 
     it 'does not paginate when a page param is explicitly given' do
-      page_data = { 'tasks' => [{ 'id' => 1, 'created_on' => 100 }] }
+      page_data = [{ 'id' => 1, 'created_on' => 100 }]
 
       expect(client).to receive(:get)
         .with("/projects/#{project_id}/tasks/archive", { page: 2 })
@@ -48,7 +48,9 @@ RSpec.describe ActiveCollab::Tasks do
     end
 
     it 'returns JSON when format is json' do
-      expect(client).to receive(:get).and_return({ 'tasks' => [] })
+      expect(client).to receive(:get)
+        .with("/projects/#{project_id}/tasks/archive", { format: 'json', page: 1 })
+        .and_return([])
 
       result = subject.archived('format' => 'json')
       expect(result).to be_a(String)
@@ -56,7 +58,9 @@ RSpec.describe ActiveCollab::Tasks do
     end
 
     it 'returns JSON when format is json with symbol key' do
-      expect(client).to receive(:get).and_return({ 'tasks' => [] })
+      expect(client).to receive(:get)
+        .with("/projects/#{project_id}/tasks/archive", { format: 'json', page: 1 })
+        .and_return([])
 
       result = subject.archived(format: 'json')
       expect(result).to be_a(String)
@@ -64,13 +68,13 @@ RSpec.describe ActiveCollab::Tasks do
     end
 
     it 'sorts tasks by created_on descending' do
-      tasks = { 'tasks' => [
+      tasks = [
         { 'id' => 1, 'created_on' => 100 },
         { 'id' => 2, 'created_on' => 300 },
         { 'id' => 3, 'created_on' => 200 }
-      ] }
+      ]
       expect(client).to receive(:get).and_return(tasks)
-      expect(client).to receive(:get).and_return({ 'tasks' => [] })
+      expect(client).to receive(:get).and_return([])
 
       result = subject.archived
       expect(result['tasks'].map { |t| t['id'] }).to eq([2, 3, 1])
@@ -91,13 +95,13 @@ RSpec.describe ActiveCollab::Tasks do
         .and_return({ 'tasks' => [{ 'id' => 1, 'created_on' => 200 }] })
 
       allow(client).to receive(:get)
-        .with("/projects/#{project_id}/tasks/archive", hash_including(format: 'hash', page: 1))
-        .and_return({ 'tasks' => [{ 'id' => 2, 'created_on' => 100 }] })
+        .with("/projects/#{project_id}/tasks/archive", { format: 'hash', page: 1 })
+        .and_return([{ 'id' => 2, 'created_on' => 100 }])
 
       # Second page returns empty to stop pagination
       allow(client).to receive(:get)
-        .with("/projects/#{project_id}/tasks/archive", hash_including(format: 'hash', page: 2))
-        .and_return({ 'tasks' => [] })
+        .with("/projects/#{project_id}/tasks/archive", { format: 'hash', page: 2 })
+        .and_return([])
     end
 
     it 'combines active and archived tasks sorted by created_on descending' do
