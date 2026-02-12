@@ -165,7 +165,7 @@ bundle install
 
 Running tests:
 ```
-bundle exec rake
+rspec
 ```
 
 ## License
