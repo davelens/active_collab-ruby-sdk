@@ -95,9 +95,14 @@ class ActiveCollab::Client
 
     handle_response_errors!(response)
 
+    body = response.body
+    unless json_response?(body)
+      return empty_response(format)
+    end
+
     format_method = { 'hash' => :to_hash, 'json' => :to_json_string, 'object' => :to_object }
     ActiveCollab::Response
-      .new(response.body)
+      .new(body)
       .send(format_method[format])
   end
 
@@ -201,6 +206,20 @@ class ActiveCollab::Client
   end
 
   private
+
+  def json_response?(body)
+    return false if body.nil? || body.strip.empty?
+
+    body.strip.start_with?('{', '[')
+  end
+
+  def empty_response(format)
+    case format
+    when 'json' then '{}'
+    when 'object' then OpenStruct.new
+    else {}
+    end
+  end
 
   def handle_response_errors!(response)
     status = response.code.to_i

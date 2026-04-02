@@ -149,6 +149,39 @@ RSpec.describe ActiveCollab::Client do
       end
     end
 
+    context 'with non-JSON response body' do
+      it 'returns an empty hash instead of raising ParseError' do
+        html_response = instance_double(
+          Net::HTTPResponse, body: '<html>OK</html>', code: '200'
+        )
+        allow(Net::HTTP).to receive(:start).and_return(html_response)
+
+        result = subject.call('Delete', URI('https://example.com/test'))
+        expect(result).to eq({})
+      end
+
+      it 'returns empty JSON string when format is json' do
+        html_response = instance_double(
+          Net::HTTPResponse, body: '<html>OK</html>', code: '200'
+        )
+        allow(Net::HTTP).to receive(:start).and_return(html_response)
+
+        result = subject.call('Delete', URI('https://example.com/test'), format: 'json')
+        expect(result).to eq('{}')
+      end
+
+      it 'returns empty OpenStruct when format is object' do
+        html_response = instance_double(
+          Net::HTTPResponse, body: '<html>OK</html>', code: '200'
+        )
+        allow(Net::HTTP).to receive(:start).and_return(html_response)
+
+        result = subject.call('Delete', URI('https://example.com/test'), format: 'object')
+        expect(result).to be_a(OpenStruct)
+        expect(result.to_h).to eq({})
+      end
+    end
+
     context 'error handling' do
       it 'raises AuthenticationError on 401' do
         allow(Net::HTTP).to receive(:start) { double(body: 'Unauthorized', code: '401') }
