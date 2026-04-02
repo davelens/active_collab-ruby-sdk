@@ -13,6 +13,7 @@ module ActiveCollab
   require_relative 'active_collab/response'
   require_relative 'active_collab/login_response'
   require_relative 'active_collab/token'
+  require_relative 'active_collab/labels'
   require_relative 'active_collab/projects'
   require_relative 'active_collab/task_lists'
   require_relative 'active_collab/tasks'
