@@ -131,6 +131,24 @@ RSpec.describe ActiveCollab::Client do
       expect(result).to eq({ success: true })
     end
 
+    context 'with Array data' do
+      it 'sends a JSON body instead of form data' do
+        request_double = instance_double(Net::HTTP::Put)
+        allow(Net::HTTP::Put).to receive(:new).and_return(request_double)
+        allow(request_double).to receive(:uri).and_return(
+          double(hostname: 'example.com', port: 443, scheme: 'https')
+        )
+        allow(request_double).to receive(:[]=)
+        allow(Net::HTTP).to receive(:start).and_return(response_double)
+        allow(ActiveCollab::Response).to receive(:new) { double(to_hash: {}) }
+
+        expect(request_double).to receive(:body=).with('[1,2,3]')
+        expect(request_double).to receive(:[]=).with('Content-Type', 'application/json')
+
+        subject.call('Put', URI('https://example.com/test'), [1, 2, 3])
+      end
+    end
+
     context 'error handling' do
       it 'raises AuthenticationError on 401' do
         allow(Net::HTTP).to receive(:start) { double(body: 'Unauthorized', code: '401') }

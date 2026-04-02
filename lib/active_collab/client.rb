@@ -49,19 +49,34 @@ class ActiveCollab::Client
   # @raise [ActiveCollab::APIError] on 4xx/5xx responses
   def call(method, uri, params = {})
     method = HTTP_METHODS.key?(method) ? method : 'Get'
-    data = params.except(:headers, :format)
-    format = if %w[hash json object].include?(params[:format])
-               params[:format]
-             else
-               'hash'
-             end
+
+    if params.is_a?(Array)
+      data = params
+      format = 'hash'
+      json_body = true
+    else
+      data = params.except(:headers, :format)
+      format = if %w[hash json object].include?(params[:format])
+                 params[:format]
+               else
+                 'hash'
+               end
+      json_body = false
+    end
 
     if method == 'Get' && data.present?
       uri.query = [uri.query, data.to_query].compact.join('&')
       request = Net::HTTP::Get.new(uri)
     else
       request = HTTP_METHODS[method].new(uri)
-      request.set_form_data(data) unless method == 'Get'
+      if method != 'Get' && data.present?
+        if json_body
+          request.body = data.to_json
+          request['Content-Type'] = 'application/json'
+        else
+          request.set_form_data(data)
+        end
+      end
     end
 
     if @token
