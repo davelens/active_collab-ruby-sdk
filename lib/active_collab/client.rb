@@ -17,9 +17,10 @@ class ActiveCollab::Client
   }.freeze
 
   HTTP_METHODS = {
-    'Get'  => Net::HTTP::Get,
-    'Post' => Net::HTTP::Post,
-    'Put'  => Net::HTTP::Put
+    'Get'    => Net::HTTP::Get,
+    'Post'   => Net::HTTP::Post,
+    'Put'    => Net::HTTP::Put,
+    'Delete' => Net::HTTP::Delete
   }.freeze
 
   APP_URL     = 'https://next-app.activecollab.com'
@@ -40,7 +41,7 @@ class ActiveCollab::Client
 
   # Performs an HTTP request to the given URI.
   #
-  # @param method [String] HTTP method ('Get', 'Post', or 'Put')
+  # @param method [String] HTTP method ('Get', 'Post', 'Put', or 'Delete')
   # @param uri [URI] the full request URI
   # @param params [Hash] request parameters
   # @option params [String] :format response format ('hash', 'json', or 'object')
@@ -132,6 +133,15 @@ class ActiveCollab::Client
   # @return [Hash, String, OpenStruct]
   def put(uri, params = {})
     call('Put', call_url(uri), params)
+  end
+
+  # Performs a DELETE request.
+  #
+  # @param uri [String] API path
+  # @param params [Hash] query parameters
+  # @return [Hash, String, OpenStruct]
+  def delete(uri, params = {})
+    call('Delete', call_url(uri), params)
   end
 
   # Authenticates with username/password and stores the resulting token.

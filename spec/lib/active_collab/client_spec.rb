@@ -59,6 +59,13 @@ RSpec.describe ActiveCollab::Client do
     end
   end
 
+  describe '#delete' do
+    it 'delegates to #call with Delete' do
+      expect(subject).to receive(:call).with('Delete', kind_of(URI), {})
+      subject.delete('/labels/5')
+    end
+  end
+
   describe '#call' do
     let(:response_double) do
       instance_double(Net::HTTPResponse, body: '{"success": true}', code: '200')
@@ -72,7 +79,7 @@ RSpec.describe ActiveCollab::Client do
       allow(ActiveCollab::Response).to receive(:new) do
         double(to_hash: { success: true })
       end
-      result = subject.call('Delete', URI('https://example.com/test'))
+      result = subject.call('Patch', URI('https://example.com/test'))
       expect(result).to eq({ success: true })
     end
 
@@ -202,7 +209,7 @@ RSpec.describe ActiveCollab::Client do
   end
 
   it 'makes a few namespaces available' do
-    expect(subject).to respond_to(:projects, :users)
+    expect(subject).to respond_to(:projects, :users, :delete)
   end
 
 end
