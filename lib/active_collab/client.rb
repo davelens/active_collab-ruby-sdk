@@ -198,6 +198,13 @@ class ActiveCollab::Client
     ActiveCollab::Projects.new(self)
   end
 
+  # Returns a Labels resource for accessing label endpoints.
+  #
+  # @return [ActiveCollab::Labels]
+  def labels
+    ActiveCollab::Labels.new(self)
+  end
+
   # Returns a Users resource for accessing user endpoints.
   #
   # @return [ActiveCollab::Users]
